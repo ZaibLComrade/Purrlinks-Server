@@ -1,4 +1,4 @@
-const findAllUsers = require("../../../lib/users/findAllUsers");
+const findAllUsers = require("../../../../lib/users/findAllUsers");
 
 const findAll = async (req, res) => {
 	const users = await findAllUsers();
