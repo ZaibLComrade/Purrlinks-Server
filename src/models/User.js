@@ -1,7 +1,10 @@
 const { model, Schema } = require("mongoose");
 
 const userSchema = new Schema({
-	test: String,
+	full_name: String,
+	email: String,
+	profile_picture: String,
+	role: String
 })
 
 const User = model("User", userSchema);

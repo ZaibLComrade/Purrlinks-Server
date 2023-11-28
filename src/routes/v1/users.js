@@ -1,9 +1,14 @@
 const express = require("express");
-const UserCollection = require("../../models/User");
-const findAll = require("../../api/v1/users/controllers/users");
+const User = require("../../models/User");
 
 const router = express.Router();
 
-router.get("/users", findAll);
+// Get all users
+router.get("/users", async (req, res, next) => {
+	const users = await User.find();
+	console.log(users);
+	res.send(users);
+	next();
+});
 
 module.exports = router;
