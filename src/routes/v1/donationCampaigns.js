@@ -17,8 +17,8 @@ router.get("/donation/details/:id", async(req, res) => {
 })
 
 // Get user specific donation campaigns
-router.get("/donation/user/:creator", async(req, res) => {
-	const creator = req.params.creator;
+router.get("/donation/user/:email", async(req, res) => {
+	const creator = req.params.email;
 	const campaigns = await DonationCampaign.find({ creator });
 	res.send(campaigns);
 })

@@ -10,6 +10,7 @@ router.get("/adoption", async(req, res) => {
 	res.send(adoptions);
 })
 
+// Dangerous
 // Get all adoption requests
 router.get("/adoption/requests", async(req, res) => {
 	const requests = await Request.find();
@@ -25,9 +26,16 @@ router.get("/adoption/details/:id", async(req, res) => {
 
 // Get user specific adoption posts
 router.get("/adoption/user/:email", async(req, res) => {
-	const email = req.params.email;
-	const adoptionPosts = await Pet.find({ email });
+	const author = req.params.email;
+	const adoptionPosts = await Pet.find({ author });
 	res.send(adoptionPosts)
+})
+
+// Get adoption request for a certain user
+router.get("/adoption/requests/:email", async(req, res) => {
+	const author = req.params.email;
+	const requests = await Request.find({ author });
+	res.send(requests);
 })
 
 module.exports = router

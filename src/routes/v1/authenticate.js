@@ -11,7 +11,7 @@ router.post("/authenticate", async(req, res) => {
 		const role = await userCollection.find(userCred, "role -_id");
 		const token = jwt.sign(userCred, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "8h" });
 		
-		res.cookie(token, {
+		res.cookie("token", token, {
 			httpOnly: true,
 			secure: true,
 			sameSite: "none",
