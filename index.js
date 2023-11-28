@@ -6,6 +6,7 @@ const applyMiddlewares = require("./src/middlewares/applyMiddlewares");
 const globalErrorHandler = require("./src/utils/config");
 const donationCampaigns = require("./src/routes/v1/donationCampaigns");
 const adoption = require("./src/routes/v1/adoption");
+const authenticate = require("./src/routes/v1/authenticate");
 
 // Initialization
 const app = express();
@@ -13,9 +14,10 @@ const port = process.env.PORT || 5000;
 
 // Middlewares
 applyMiddlewares(app);
+app.use(authenticate);
 app.use(usersRoute);
 app.use(donationCampaigns);
-app.use(adoption)
+app.use(adoption);
 
 app.get('/health', (req, res) => {
 	res.send("Server is running");
