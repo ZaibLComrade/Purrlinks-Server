@@ -16,4 +16,18 @@ router.get("/adoption/requests", async(req, res) => {
 	res.send(requests);
 })
 
+// Get pet details
+router.get("/adoption/details/:id", async(req, res) => {
+	const id = req.params.id;
+	const adoptionDetails = await Pet.findById(id)
+	res.send(adoptionDetails);
+})
+
+// Get user specific adoption posts
+router.get("/adoption/user/:email", async(req, res) => {
+	const email = req.params.email;
+	const adoptionPosts = await Pet.find({ email });
+	res.send(adoptionPosts)
+})
+
 module.exports = router
