@@ -6,8 +6,7 @@ const verifyAdmin = require("../../middlewares/verifyAdmin");
 const router = express.Router();
 
 // Get all users
-router.get("/users", verifyToken, verifyAdmin, async (req, res) => {
-	console.log("ran");
+router.get("/users",verifyToken, verifyAdmin, async (req, res) => {
 	const users = await User.find();
 	res.send(users);
 });
