@@ -29,4 +29,27 @@ router.get("/donation/user", verifyToken, async(req, res) => {
 	res.send(campaigns);
 })
 
+// Create a donation campaing
+router.post("/donation", verifyToken, async(req, res) => {
+	if(req.query.email !== req.user.email) {
+		return res.status(401).send({ message: "unauthorized access" });
+	}
+	
+	const newCampaign = req.body;
+	const result = await DonationCampaign.collection.insertOne(newCampaign);
+	res.send(result);
+})
+
+// Update a campaign
+router.patch("/donation/:id", verifyToken, async(req, res) => {
+	if(req.query.email !== req.user.email) {
+		return res.status(401).send({ message: "unauthorized access" })
+	}
+	
+	const _id = req.params._id
+	const update = req.body;
+	const result = await DonationCampaign.updateOne(_id, { $set: update })
+	res.send(result);
+})
+
 module.exports = router;

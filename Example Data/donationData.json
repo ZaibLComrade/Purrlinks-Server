@@ -1,6 +1,5 @@
 [
 	{
-		"id": "1",
 		"creator": "kmjahanzaib@gmail.com",
 		"pet_name": "Fluffy",
 		"pet_image": "https://source.unsplash.com/random",
@@ -13,7 +12,6 @@
 		"isPaused": true
 	},
 	{
-		"id": "2",
 		"creator": "kmjahanzaib@gmail.com",
 		"pet_name": "Rover",
 		"pet_image": "https://source.unsplash.com/random",
@@ -26,7 +24,6 @@
 		"isPaused": false
 	},
 	{
-		"id": "3",
 		"creator": "kmjahanzaib@outlook.com",
 		"pet_name": "Fluffy",
 		"pet_image": "https://source.unsplash.com/random",
@@ -39,7 +36,6 @@
 		"isPaused": false
 	},
 	{
-		"id": "4",
 		"creator": "kmjahanzaib@gmail.com",
 		"pet_name": "Rover Whiskers",
 		"pet_image": "https://source.unsplash.com/random",
