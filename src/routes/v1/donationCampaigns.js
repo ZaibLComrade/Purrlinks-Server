@@ -11,7 +11,7 @@ router.get("/donation", verifyToken, verifyAdmin, async(req, res) => {
 	res.send(donationCampaigns);
 })
 
-// Get all donation campaign details
+// Get donation campaign details by id
 router.get("/donation/details/:id", async(req, res) => {
 	const id = req.params.id;
 	const donationDetails = await DonationCampaign.findById(id);

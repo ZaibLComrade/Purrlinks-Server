@@ -8,6 +8,7 @@ const donationCampaigns = require("./src/routes/v1/donationCampaigns");
 const adoption = require("./src/routes/v1/adoption");
 const authenticate = require("./src/routes/v1/authenticate");
 const stripe = require("./src/routes/v1/stripe");
+const donation = require("./src/routes/v1/donation");
 
 // Initialization
 const app = express();
@@ -20,6 +21,7 @@ app.use(usersRoute);
 app.use(donationCampaigns);
 app.use(adoption);
 app.use(stripe);
+app.use(donation);
 
 app.get('/health', (req, res) => {
 	res.send("Server is running");

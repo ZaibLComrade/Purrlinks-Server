@@ -30,6 +30,15 @@ router.post("/users", async(req, res) => {
 	res.send(result);
 })
 
+// Update or insert user to database
+router.put("/users/:email", async(req, res) => {
+	const email = req.params.email;
+	const update = req.body;
+	const query = { email };
+	const result = await User.collection.updateOne(query, { $set: update }, { upsert: true });
+	res.send(result);
+})
+
 // Update user role to admin
 router.patch("/users/make-admin/:email", async(req, res) => {
 	const email = req.params.email;
