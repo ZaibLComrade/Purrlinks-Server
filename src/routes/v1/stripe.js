@@ -5,13 +5,16 @@ const express = require("express");
 const router = express.Router();
 
 router.post("/payment/create-intent", async(req, res) => {
+	console.log(req);
 	const { donation } = req.body;
-	const amount = donation * 100;
-	const { clientSecret } = stripe.paymentIntents.create({
-		amount,
+	const amount = parseInt(donation * 100);
+	const { client_secret } = await stripe.paymentIntents.create({
+		amount: amount,
 		currency: "usd",
 		payment_method_types: ["card"],
 	})
 	
-	res.send({ clientSecret })
+	res.send({ clientSecret: client_secret })
 }) 
+
+module.exports = router;
