@@ -6,14 +6,16 @@ const verifyAdmin = require("../../middlewares/verifyAdmin");
 
 const router = express.Router();
 
-// Get all adoption posts
-router.get("/adoption", verifyToken, verifyAdmin, async(req, res) => {
+// Get all unadopted adoption posts
+router.get("/adoption", async(req, res) => {
 	const filter = {};
 	
 	const category = req.query.category;
+	const adopted  = req.query?.adopted;
 	const sort = req.query.sort || -1;
 	
 	if(category) filter.pet_category = category;
+	if(adopted) filter.adopted = ( adopted === 'true' ) ? true : false;
 	
 	console.log(filter);
 	const adoptions = await Pet.find(filter).sort({ posted_date: sort });
@@ -38,9 +40,8 @@ router.get("/adoption/user", verifyToken, async(req, res) => {
 	res.send(adoptionPosts)
 })
 
-// Get adoption request for a certain user
+// Get adoption request for a certain adoption post
 router.get("/adoption/requests", verifyToken, async(req, res) => {
-	console.log(req.query.email)
 	if(req.query.email !== req.user.email) {
 		return res.status(401).send({ message: "unauthorized access" })
 	}
@@ -48,6 +49,42 @@ router.get("/adoption/requests", verifyToken, async(req, res) => {
 	const author = req.query.email;
 	const requests = await Request.find({ author });
 	res.send(requests);
+})
+
+// Accept Request
+router.patch("/adoption/requests/:id", verifyToken, async(req, res) => {
+	if(req.query.email !== req.user.email) {
+		return res.status(401).send({ message: "unauthorized access" });
+	}
+	
+	const _id = req.params.id;
+	console.log(_id);
+	const accepted = req.body;
+	const update = { $set: accepted };
+	
+	const result = await Pet.findByIdAndUpdate( _id, update )
+	const acknowledged = result ? true : false;
+	console.log(update, acknowledged, result);
+	res.send({ acknowledged });
+})
+
+// Delete (reject) request
+router.delete("/adoption/requests/:id", verifyToken, async(req, res) => {
+	if(req.query.email !== req.user.email) {
+		return res.status(401).send({ message: "unauthorized access" });
+	}
+	
+	const _id = req.params.id;
+	const filter = { _id }
+	const result = await Request.deleteOne(filter);
+	res.send(result);
+}) 
+
+// Post an adoption request
+router.post("/adoption/requests", async(req, res) => {
+	const request = req.body;
+	const result = await Request.collection.insertOne(request);
+	res.send(result);
 })
 
 // Post a pet
@@ -62,10 +99,8 @@ router.post("/adoption", verifyToken, async(req, res) => {
 })
 
 // Delete one adoption
-router.delete("/adoption/:id", verifyToken, async(req, res) => {
-	if(req.query.email !== req.user.email) {
-		return res.status(401).send({ message: "unauthorized access" });
-	}
+router.delete("/adoption/:id", verifyToken, verifyAdmin, async(req, res) => {
+
 	
 	const _id = req.params.id;
 	const result = await Pet.deleteOne({ _id });
@@ -74,13 +109,22 @@ router.delete("/adoption/:id", verifyToken, async(req, res) => {
 
 // Upate one adoption
 router.put("/adoption/:id", verifyToken, async(req, res) => {
-	// if(req.query.email !== req.user.email) {
-	// 	return res.status(401).send({ message: "unauthorized access" });
-	// }
+	if(req.query.email !== req.user.email) {
+		return res.status(401).send({ message: "unauthorized access" });
+	}
 	const _id = req.params.id
 	const query = { _id }
 	const update = { $set: req.body }
 	const result = await Pet.updateOne(query, update);
+	res.send(result);
+})
+
+// Made endpoint to handle adoption status toggle
+router.patch("/adoption/:id", verifyToken, verifyAdmin, async(req, res) => {
+	const _id = req.params.id;
+	const query = { _id };
+	const update = { $set: req.body };
+	const result = await Pet.updateOne( query, update );
 	res.send(result);
 })
 

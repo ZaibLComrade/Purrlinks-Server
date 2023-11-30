@@ -40,10 +40,12 @@ router.put("/users/:email", async(req, res) => {
 })
 
 // Update user role to admin
-router.patch("/users/make-admin/:email", async(req, res) => {
-	const email = req.params.email;
-	const makeAdmin = { $set: { role: "admin" } }
-	const result = await User.updateOne({ email }, makeAdmin);
+router.patch("/users/:id", async(req, res) => {
+	const _id = req.params.id;
+	const update = req.body;
+	const query = { _id }
+	const result = await User.updateOne(query, { $set: update });
+	console.log(result);
 	res.send(result)
 })
 
