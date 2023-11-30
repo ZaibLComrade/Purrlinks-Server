@@ -9,8 +9,7 @@ router.post("/authenticate", async(req, res) => {
 	const email = req.body.email;
 	if(method === "login") {
 		const [ role ] = await userCollection.find({ email }, "role -_id");
-		console.log(email, role.role);
-		const userCred = { email, role: role.role };
+		const userCred = { email, role: role?.role };
 		console.log(userCred);
 		const token = jwt.sign(userCred, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "8h" });
 		
