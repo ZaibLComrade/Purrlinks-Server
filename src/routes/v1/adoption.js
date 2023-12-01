@@ -8,16 +8,24 @@ const router = express.Router();
 
 // Get all unadopted adoption posts
 router.get("/adoption", async(req, res) => {
-	const filter = {};
+	const initFilter = {};
 	
 	const category = req.query.category;
 	const adopted  = req.query?.adopted;
+	const searchQuery = req.query?.search;
 	const sort = req.query.sort || -1;
 	
-	if(category) filter.pet_category = category;
-	if(adopted) filter.adopted = ( adopted === 'true' ) ? true : false;
+	if(category) initFilter.pet_category = category;
+	if(adopted) initFilter.adopted = ( adopted === 'true' ) ? true : false;
+	if(searchQuery) initFilter.pet_name = searchQuery; // Seach by name
 	
-	console.log(filter);
+	const filterArray = Object.entries(initFilter).map(([key, value]) => {
+		return (typeof value === 'string') 
+			? { [key]: new RegExp(value, 'i') } 
+			: { [key]: value }
+	})
+	const filter = { $and: [ ...filterArray ] };
+	
 	const adoptions = await Pet.find(filter).sort({ posted_date: sort });
 	res.send(adoptions);
 })
