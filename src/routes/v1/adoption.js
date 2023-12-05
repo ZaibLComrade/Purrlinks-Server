@@ -24,9 +24,12 @@ router.get("/adoption", async(req, res) => {
 			? { [key]: new RegExp(value, 'i') } 
 			: { [key]: value }
 	})
-	const filter = { $and: [ ...filterArray ] };
+	
+	let filter = {};
+	if(filterArray.length) filter = { $and: [ ...filterArray ] };
 	
 	const adoptions = await Pet.find(filter).sort({ posted_date: sort });
+	
 	res.send(adoptions);
 })
 
